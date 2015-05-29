@@ -1,0 +1,35 @@
+This was an iteresting problem to solve and I had a lot of fun thinking about it.  My final approach I don't think works 100% correctly, but I wanted to finish something fully to show you my coding style, etc. Also should not have a global variable of cameras_dict, ran out of time working on this.
+
+My first approach was to try to figure out the similarity issue right away.  How do you know if a camera model is the same with different formatting, or a different model entirely?  After doing some research on fuzzy string comparisons, I settled on difflib sequencer to get a 'similarity ratio' for 2 strings.  I wanted to compare each camera model against the others to see if I can get a ratio that is reasonably sure the camera model is a mis-formatted model, or a new model that I need to save with a new model name.
+
+I tried some test code with the examples  you had:
+
+s1 = "Canon 5D mark II"
+s2 = "Canon 5d MKII"
+s3 = "Canon 5dMKII"
+s4 = "Canon 5D Mk III"
+
+And ran into some trouble.  My test code for comparing s1 to s4 (which, by your goal should have a low similarity ratio) had a higher similarity ratio then when comparing s2, or s3.  I thought 'okay, this is probably because most of the string is so similar "Canon", "5D" and "II" vs "III" '.  What happens if i try to reduce the similarity between the strings?  I'll remove all 'words' in the 2 strings that are the same. (ie. 'Canon' and '5D')
+
+So i converted both s1 and s4 into lowercase characters, threw them into seperate set's and took the differences of the sets to get the strings "mk iii" and "mark ii".  The similarity ratio was still quite high, due to similar "II" is to "III" in the string.
+
+Huh, okay... at this point I had been thinking, coding and experimenting for about 30 minutes so I quickly jotted down some notes and finished the current solution so I would have some fully working code to submit to you.
+
+Here are some other things I thought to try:
+
+	- Can I use zip function to tie the similar items together somehow and remove them?
+
+	- Can I check to make sure the strings are somewhat similar (ie. both have 'canon' in the string, or 'sony' etc) then pull out all text that constitute's the model numbers ie. 'MK500', 'AZ200', etc and compare purely based on the numerical values of the model numbers? 
+
+		-But wait, this will fail for roman numerals like 'Mark II' and 'mk III'.
+		-OKay, so we could also search for roman numberals as well.
+
+	- Could you create a heuristic as you parse through the list of camera models, looking specifically to compare the the models that are the most similar, rather than having to loop through each saved camera model, each time you read a line from the file?
+
+
+I started to run out of time working on this, so to finish up the code I had started writing with the similarity ratio, how do I make this efficient?  Do i want to throw all the camera models from the file into a list or set, and then run through recursively comparing from there?
+
+Do I want to compare as I insert?
+
+I ended up comparing as I insert to make things easier, and using dictionaries to make lookup times faster.
+
